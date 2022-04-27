@@ -42,5 +42,6 @@ for i in range(len(lista_imagini)):
 dicti = {lista_nume_DB[i]: listaFete_codificateDB[i] for i in range(len(lista_nume_DB))}
 print(dicti)
 
+
 with open("imagini_codificate.json", "w") as write_file:
     json.dump(dicti, write_file, cls=NumpyArrayEncoder)

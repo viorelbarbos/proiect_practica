@@ -31,5 +31,6 @@ def insertData():
     print("Datele s-au adaugat cu succes!")
 
 
+
 if __name__ == '__main__':
     insertData()

@@ -115,6 +115,7 @@ def aplicatePrezenta():
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
+
     print("Prezenta a fost adaugata studentiilor: ", numele_fetelor_gasite)
     # inchidem camera si fereastra
     mycursor.close()
