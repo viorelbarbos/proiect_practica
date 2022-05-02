@@ -1,4 +1,3 @@
-import gc
 import json
 import os
 from datetime import date
@@ -82,6 +81,7 @@ def aplicatePrezenta():
                     sql = "UPDATE tabelprezenta SET Prezenta = %s, LocatieImagine = %s \
                     WHERE NumePrenume = %s AND NrMatricol = %s"
                     val = ("1", imgscr, name, mat)
+                    print(val)
                     mycursor.execute(sql, val)
                     mydb.commit()
 
@@ -115,13 +115,11 @@ def aplicatePrezenta():
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-
     print("Prezenta a fost adaugata studentiilor: ", numele_fetelor_gasite)
     # inchidem camera si fereastra
+    mydb.close()
     mycursor.close()
     video_capture.release()
-    del video_capture
-    gc.collect()
     cv2.destroyAllWindows()
 
 

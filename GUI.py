@@ -80,7 +80,7 @@ class App(QMainWindow):
     def faceDetect(self):
         aplicatePrezenta()
         self.buttonFD.hide()
-        print("Asd")
+        print("S-a realizat prezenta")
 
     def afisare(self):
         sql = "SELECT NumePrenume FROM facedetection"
