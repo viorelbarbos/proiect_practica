@@ -56,7 +56,7 @@ class App(QMainWindow):
         self.button.clicked.connect(self.on_click)
         self.show()
 
-        self.buttonRP.clicked.connect(self.apStudenti)
+        self.buttonRP.clicked.connect(self.generareRaport)
         self.buttonRP.hide()
 
         self.buttonFD.clicked.connect(self.faceDetect)
@@ -101,14 +101,14 @@ class App(QMainWindow):
             nume += student[i] + "\n"
         QMessageBox.question(self, 'Studenti', nume, QMessageBox.Ok)
 
-    def apStudenti(self):
+    def generareRaport(self):
         today = str(date.today())
         sql = "SELECT NumePrenume, NrMatricol, Prezenta, Data FROM tabelprezenta WHERE Data = %s "
         val = tuple(map(str, today.split(', ')))
         mycursor.execute(sql, val)
         myresult = mycursor.fetchall()
 
-        completePath = os.path.join(today, "RAPORT_PREZENTE1" + ".txt")
+        completePath = os.path.join(today, "RAPORT_PREZENTE" + ".txt")
         file = open(completePath, "w+")
         for student in myresult:
             if int(student[2] == 1):
@@ -123,7 +123,9 @@ class App(QMainWindow):
                         dat=student[3]))
             file.write("\n\n")
         file.close()
-        print("Raportul cu studentii prezenti a fost realizat!")
+        print("Raportul cu studentii prezenti a fost realizat!  Se poate accesa din " + completePath)
+        QMessageBox.question(self, 'Intocmire raport', 'Raportul cu studentii prezenti a fost realizat!  \nSe poate '
+                                                       'accesa din ' + completePath, QMessageBox.Ok)
         self.buttonRP.hide()
 
 
