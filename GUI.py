@@ -108,8 +108,9 @@ class App(QMainWindow):
         mycursor.execute(sql, val)
         myresult = mycursor.fetchall()
 
-        completePath = os.path.join(today, "RAPORT_PREZENTE" + ".txt")
+        completePath = os.path.join("rapoarte", "RAPORT_PREZENTE_" + today + ".txt")
         file = open(completePath, "w+")
+        print(myresult)
         for student in myresult:
             if int(student[2] == 1):
                 file.write(
@@ -117,15 +118,16 @@ class App(QMainWindow):
                         st=student[0], mat=student[1], dat=student[3]))
             else:
                 file.write(
-                    "Studentul/Studenta  {st}, avand numarul matricol {mat}, NU a fost prezent in data de {dat} ".format(
-                        st=student[0],
-                        mat=student[1],
-                        dat=student[3]))
+                    "Studentul/Studenta  {st}, avand numarul matricol {mat}, NU a fost prezent in data de {dat} ".format
+                    (st=student[0],
+                     mat=student[1],
+                     dat=student[3]))
             file.write("\n\n")
         file.close()
         print("Raportul cu studentii prezenti a fost realizat!  Se poate accesa din " + completePath)
-        QMessageBox.question(self, 'Intocmire raport', 'Raportul cu studentii prezenti a fost realizat!  \nSe poate '
-                                                       'accesa din ' + completePath, QMessageBox.Ok)
+        QMessageBox.question(self, 'ERROR', "Raportul cu studentii prezenti a fost realizat!  Se poate accesa din " +
+                             completePath, QMessageBox.Ok)
+
         self.buttonRP.hide()
 
 

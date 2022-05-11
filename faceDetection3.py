@@ -6,6 +6,7 @@ import face_recognition
 import mysql.connector
 import numpy as np
 from dataInsert import insertData
+import threading
 
 def aplicatePrezenta():
     today = str(date.today())  # preluam data curenta, pentru a crea un fisier
@@ -119,7 +120,11 @@ def aplicatePrezenta():
     mycursor.close()
     video_capture.release()
     cv2.destroyAllWindows()
+    os.chdir(r"C:\Users\viore\OneDrive\Desktop\proiect_practica")
 
 
 if __name__ == '__main__':
-    aplicatePrezenta()
+    t1 = threading.Thread(target=aplicatePrezenta())
+    t1.start()
+    t1.join()
+
