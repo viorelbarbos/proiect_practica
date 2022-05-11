@@ -1,8 +1,10 @@
+import os.path
 import sys
 import mysql.connector
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QLineEdit, QMessageBox, QLabel
 from faceDetection3 import aplicatePrezenta
+from datetime import date
 
 mydb = mysql.connector.connect(  # accesam baza de date
     host="localhost",
@@ -19,6 +21,7 @@ class App(QMainWindow):
     def __init__(self):
         super().__init__()
         self.button = QPushButton('Afisare prezente student', self)
+        self.buttonRP = QPushButton('Raport prezenta', self)
         self.buttonFD = QPushButton('Realizare prezenta', self)
         self.buttonAF = QPushButton('Afisare nume studenti', self)
         self.textbox = QLineEdit(self)
@@ -29,6 +32,7 @@ class App(QMainWindow):
         self.width = 400
         self.height = 400
         self.initUI()
+        # self.setStyleSheet("color:rgb(204, 204, 204)")
 
     def initUI(self):
         self.setWindowTitle(self.title)
@@ -45,11 +49,15 @@ class App(QMainWindow):
         self.button.move(210, 115)
         self.buttonFD.move(20, 20)
         self.buttonAF.move(20, 60)
+        self.buttonRP.move(140, 20)
 
         # connect button to function on_click
         self.button.resize(150, 25)
         self.button.clicked.connect(self.on_click)
         self.show()
+
+        self.buttonRP.clicked.connect(self.apStudenti)
+        self.buttonRP.hide()
 
         self.buttonFD.clicked.connect(self.faceDetect)
         self.show()
@@ -80,6 +88,7 @@ class App(QMainWindow):
     def faceDetect(self):
         aplicatePrezenta()
         self.buttonFD.hide()
+        self.buttonRP.show()
         print("S-a realizat prezenta")
 
     def afisare(self):
@@ -91,6 +100,31 @@ class App(QMainWindow):
         for i in range(len(student)):
             nume += student[i] + "\n"
         QMessageBox.question(self, 'Studenti', nume, QMessageBox.Ok)
+
+    def apStudenti(self):
+        today = str(date.today())
+        sql = "SELECT NumePrenume, NrMatricol, Prezenta, Data FROM tabelprezenta WHERE Data = %s "
+        val = tuple(map(str, today.split(', ')))
+        mycursor.execute(sql, val)
+        myresult = mycursor.fetchall()
+
+        completePath = os.path.join(today, "RAPORT_PREZENTE1" + ".txt")
+        file = open(completePath, "w+")
+        for student in myresult:
+            if int(student[2] == 1):
+                file.write(
+                    "Studentul/Studenta {st}, avand numarul matricol {mat}, a fost prezent in data de {dat} ".format(
+                        st=student[0], mat=student[1], dat=student[3]))
+            else:
+                file.write(
+                    "Studentul/Studenta  {st}, avand numarul matricol {mat}, NU a fost prezent in data de {dat} ".format(
+                        st=student[0],
+                        mat=student[1],
+                        dat=student[3]))
+            file.write("\n\n")
+        file.close()
+        print("Raportul cu studentii prezenti a fost realizat!")
+        self.buttonRP.hide()
 
 
 if __name__ == '__main__':

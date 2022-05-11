@@ -7,10 +7,9 @@ import mysql.connector
 import numpy as np
 from dataInsert import insertData
 
-
 def aplicatePrezenta():
     today = str(date.today())  # preluam data curenta, pentru a crea un fisier
-    parent_directory = r"C:\Users\viore\Desktop\proiect_practica"  # specificam calea absoluta unde o sa cream fisierul
+    parent_directory = r"C:\Users\viore\OneDrive\Desktop\proiect_practica"  # specificam calea absoluta unde o sa cream fisierul
     dir_create = os.path.join(parent_directory, today)  # realizam calea
     if os.path.exists(dir_create):  # daca directorul exista, afisam un mesaj corespunzator
         print("Directorul exista!")
@@ -79,9 +78,8 @@ def aplicatePrezenta():
                     mat = "" + matricol[0]
 
                     sql = "UPDATE tabelprezenta SET Prezenta = %s, LocatieImagine = %s \
-                    WHERE NumePrenume = %s AND NrMatricol = %s"
-                    val = ("1", imgscr, name, mat)
-                    print(val)
+                    WHERE NumePrenume = %s AND NrMatricol = %s AND Data = %s"
+                    val = ("1", imgscr, name, mat, today)
                     mycursor.execute(sql, val)
                     mydb.commit()
 
