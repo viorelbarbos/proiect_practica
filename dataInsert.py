@@ -10,27 +10,27 @@ def insertData():
         database="mydatabase"
     )
     mycursor = mydb.cursor()
-    rezultat = []
+    rezult = []
     mycursor.execute(
         "SELECT NumePrenume FROM facedetection ")
     myresult = mycursor.fetchall()
-    lista_nume_DB = [item for t in myresult for item in t]
-    for i in range(len(lista_nume_DB)):
+    students_names_fromDB = [item for t in myresult for item in t]
+    for i in range(len(students_names_fromDB)):
         sql = "SELECT NrMatricol FROM facedetection WHERE NumePrenume = %s"
-        val = tuple(map(str, lista_nume_DB[i].split(', ')))
+        val = tuple(map(str, students_names_fromDB[i].split(', ')))
         # print(val)
         mycursor.execute(sql, val)
         myresult = mycursor.fetchall()
-        rezultat += myresult
+        rezult += myresult
         # print(rezultat)
 
-    lista_nrMatricol = [item for t in rezultat for item in t]
+    list_registration_number = [item for t in rezult for item in t]
     # print(lista_nrMatricol)
 
     today = str(date.today())
-    for x in range(len(lista_nume_DB)):
+    for x in range(len(students_names_fromDB)):
         querry = "INSERT INTO tabelprezenta (NumePrenume, NrMatricol, Data) VALUES (%s, %s, %s)"
-        val = (lista_nume_DB[x], lista_nrMatricol[x], today)
+        val = (students_names_fromDB[x], list_registration_number[x], today)
         # print(lista_nume_DB[x], lista_nrMatricol[x])
         mycursor.execute(querry, val)
         mydb.commit()

@@ -26,7 +26,7 @@ class App(QMainWindow):
         self.buttonAF = QPushButton('Afisare nume studenti', self)
         self.textbox = QLineEdit(self)
         self.label1 = QLabel(self)
-        self.title = 'Aplicatie pentru prezenta automana'
+        self.title = 'Aplicatie pentru prezenta automata'
         self.left = 500
         self.top = 250
         self.width = 400
@@ -69,25 +69,24 @@ class App(QMainWindow):
     @pyqtSlot()
     def on_click(self):
         textboxValue = self.textbox.text()
-        sql = "SELECT NumePrenume, NrMatricol, Prezenta, Data FROM tabelprezenta WHERE NumePrenume = %s "
+        sql = "SELECT NumePrenume, NrMatricol, Prezenta, Data FROM tabelprezenta WHERE NumePrenume = %s"
         val = tuple(map(str, textboxValue.split(', ')))
         mycursor.execute(sql, val)
         myresult = mycursor.fetchall()
         student = [item for t in myresult for item in t]
         if student:
-            prezenta = ""
+            present = ""
             for i in range(2, len(student) - 1, 4):
-                prezenta += str(student[i]) + " / " + str(student[i + 1]) + " || "
+                present += str(student[i]) + " / " + str(student[i + 1]) + " || "
 
             QMessageBox.question(self, 'Prezentele studentului: ', "Nume, prenume: " + student[0] + \
-                                 "\nNumar matricol: " + student[1] + "\nPrezenta/Data: " + prezenta, QMessageBox.Ok)
+                                 "\nNumar matricol: " + student[1] + "\nPrezenta/Data: " + present, QMessageBox.Ok)
         else:
             QMessageBox.question(self, 'ERROR', 'Ati introdus un nume INVALID', QMessageBox.Ok)
         self.textbox.setText("")
 
     def faceDetect(self):
         aplicatePrezenta()
-        self.buttonFD.hide()
         self.buttonRP.show()
         print("S-a realizat prezenta")
 
@@ -96,21 +95,20 @@ class App(QMainWindow):
         mycursor.execute(sql)
         myresult = mycursor.fetchall()
         student = [item for t in myresult for item in t]
-        nume = ""
+        name = ""
         for i in range(len(student)):
-            nume += student[i] + "\n"
-        QMessageBox.question(self, 'Studenti', nume, QMessageBox.Ok)
+            name += student[i] + "\n"
+        QMessageBox.question(self, 'Studenti', name, QMessageBox.Ok)
 
     def generareRaport(self):
-        today = str(date.today())
+        current_day = str(date.today())
         sql = "SELECT NumePrenume, NrMatricol, Prezenta, Data FROM tabelprezenta WHERE Data = %s "
-        val = tuple(map(str, today.split(', ')))
+        val = tuple(map(str, current_day.split(', ')))
         mycursor.execute(sql, val)
         myresult = mycursor.fetchall()
 
-        completePath = os.path.join("rapoarte", "RAPORT_PREZENTE_" + today + ".txt")
+        completePath = os.path.join("rapoarte", "RAPORT_PREZENTE_" + current_day + ".txt")
         file = open(completePath, "w+")
-        print(myresult)
         for student in myresult:
             if int(student[2] == 1):
                 file.write(
