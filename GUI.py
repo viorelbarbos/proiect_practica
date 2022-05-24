@@ -6,14 +6,14 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QLineEdit, Q
 from faceDetection3 import aplicatePrezenta
 from datetime import date
 
-mydb = mysql.connector.connect(  # accesam baza de date
+mydb = mysql.connector.connect(
     host="localhost",
     user="root",
     password="",
     database="mydatabase"
 )
 
-mycursor = mydb.cursor()  # obiect de tip cursor pentru a executa interogarile
+mycursor = mydb.cursor()
 
 
 class App(QMainWindow):
